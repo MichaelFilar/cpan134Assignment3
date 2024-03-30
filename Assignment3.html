@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+<body>
+    <h2>Assignment 3</h2>
+    <p style="font-size: 130%"><strong>Press F12 to see terminal output of all functions and stuff.</strong></p>
+
+    <form id="add_product">
+        <h3>Add Product</h3>
+        <label for="in_num1">Product ID: </label>
+        <input type="text" id="in_num1"><br>
+        <label for="in_num2">Product Name: </label>
+        <input type="text" id="in_num2"><br>
+        <label for="in_num3">Price: </label>
+        <input type="text" id="in_num3"><br>
+        <label for="in_num4">Quantity: </label>
+        <input type="text" id="in_num4"><br>
+
+        <input type="button" id="add_button" value="Add Product" onclick="addInput()">
+        <br>
+    </form><br>
+
+
+    <form id="rem_product">
+        <h3>Remove Product</h3>
+        <label for="rem_num1">Product ID: </label>
+        <input type="text" id="rem_num1"><br>
+
+        <input type="button" id="rem_button" value="Remove Product" onclick="removeInput()"><br>
+        <span id="rem_output" name="rem_output"></span><br>
+    </form>
+
+    <form id="display_inv">
+        <h3>Display Inventory</h3>
+        <input type="button" id="inv_button" value="Display Inventory" onclick="inventory.displayInventory()">
+    </form>
+
+    <form id="display_total">
+        <h3>Display Total</h3>
+        <input type="button" id="total_button" value="Display Total" onclick="inventory.displayTotal()"><br>
+        <span id="total_output" name="total_output"></span><br>
+    </form>
+    <script>
+        //inventory object made
+        var inventory = {
+            //No products in it
+            products: [],
+            //addProducts function
+            addProducts: function(prodID, name, price, quantity) {
+                for (i in this.products) {
+                    if (this.products[i].prodID == prodID) {
+                        this.products[i].quantity += Number(quantity);
+                        return;
+                    }
+                }
+                price = Number(price);
+                quantity = Number(quantity);
+                this.products[this.products.length] = {prodID, name, price, quantity};
+                return;
+            },
+            //displayInventory function
+            displayInventory: function() {
+                console.log(" ")
+                for (i in this.products) {
+                    console.log(this.products[i].name+": "+this.products[i].quantity+" for $"+this.products[i].price+" each.");
+                }
+                return;
+            },
+            //findProduct function
+            findProduct: function(prodID) {
+                console.log(" ")
+                for (i in this.products) {
+                    if (this.products[i].prodID == prodID) {
+                        console.log(this.products[i].name+": "+this.products[i].quantity+" for $"+this.products[i].price+" each.");
+                        return;
+                    }
+                }
+                console.log("Sorry, this product does not exist.");
+                return;
+            },
+            //removeProduct function
+            removeProduct: function(prodID) {
+                for (i in this.products) {
+                    if (this.products[i].prodID == prodID) {
+                        this.products.splice(i, 1);
+                    }
+                }
+            },
+            displayTotal: function() {
+                console.log(" ")
+                total = 0;
+                for (i in this.products) {
+                    total += (this.products[i].price*this.products[i].quantity);
+                }
+                console.log("Total value of inventory is: $"+total);
+                document.getElementById("total_output").innerHTML = "Total value of inventory is: $"+total;
+            }
+        };
+        //function to take the form input then add a product using the inputted values
+        function addInput() {
+            let prodID = (document.getElementById("in_num1").value);
+            let name = (document.getElementById("in_num2").value);
+            let price = (document.getElementById("in_num3").value);
+            let quantity = (document.getElementById("in_num4").value);
+
+            inventory.addProducts(prodID,name,price,quantity);
+            inventory.findProduct(prodID);
+        }
+
+        //function to take the form input then remove the product using the inputted values.
+        function removeInput() {
+            console.log(" ")
+            let prodID = (document.getElementById("rem_num1").value);
+            console.log("Removing "+prodID)
+            document.getElementById("rem_output").innerHTML = "Removed "+prodID;
+            inventory.removeProduct(prodID);
+        }
+
+        //Terminal Output
+
+        //addProducts
+        inventory.addProducts("id123", "Car", "20000", "1");
+        inventory.addProducts("id234", "Phone", "1000", "2");
+        inventory.addProducts("id345", "Glasses", "15", "5");
+        inventory.addProducts("id456", "Drink", "3", "4");
+        console.log(" ")
+        console.log("displayInventory")
+        inventory.displayInventory();
+        console.log(" ")
+        console.log("findProduct")
+        inventory.findProduct("id123");
+        inventory.findProduct("id345");
+        //inventory.findProduct("id345");
+        inventory.removeProduct("id123");
+        inventory.displayInventory();
+        console.log(inventory.products);
+        inventory.displayTotal();
+
+    </script>
+</body>
+</html>
